@@ -1,3 +1,4 @@
+"use client";
 import { Ref, useEffect, useMemo, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -8,18 +9,38 @@ interface Option {
 }
 
 interface DynamicSelectProps {
-  placeholder?: string;
+  // Core functionality
   options: Option[];
+  value?: string;
+  onChange?: (value: string) => void;
   onCreateOption?: (value: string) => Promise<void>;
+  defaultValues?: string[];
+
+  // Customization
   sizeVariant?: "sm" | "md" | "lg";
+  className?: string;
+  inputClassName?: string;
+  optionClassName?: string;
+  containerClassName?: string;
+
+  // Labels & Text
   label?: string;
-  creatable?: boolean;
+  placeholder?: string;
   creatableText?: string;
   searchOrCreateInputPlaceholder?: string;
   selectOrCreateMessage?: string;
-  value?: string;
-  onChange?: (value: string) => void;
-  defaultValues?: string[];
+  loadingMessage?: string;
+
+  // Features
+  creatable?: boolean;
+  disabled?: boolean;
+  loading?: boolean;
+  clearable?: boolean;
+  searchable?: boolean;
+
+  // Render props for customization
+  renderOption?: (option: Option) => React.ReactNode;
+  renderCreateOption?: (inputValue: string) => React.ReactNode;
 }
 
 const sizeClasses = {
@@ -29,24 +50,44 @@ const sizeClasses = {
 };
 
 const DynamicSelect = ({
-  placeholder = "Seleione uma opção",
-  creatableText = "Create",
-  searchOrCreateInputPlaceholder = "Pesquisar ou criar novo item",
-  selectOrCreateMessage = "Selecione um item ou crie um novo",
-  sizeVariant = "lg",
+  // Core functionality
+  placeholder = "Select an option",
   options,
-  onCreateOption,
-  label,
-  creatable = false,
   value,
-  onChange = (_value: string) => {},
+  onChange = () => {},
+  onCreateOption,
   defaultValues = [],
+
+  // Customization
+  sizeVariant = "md",
+  className,
+  inputClassName,
+  optionClassName,
+  containerClassName,
+
+  // Labels & Text
+  label,
+  creatableText = "Create",
+  searchOrCreateInputPlaceholder = "Search or create",
+  selectOrCreateMessage = "Select an item or create new",
+  loadingMessage = "Loading options...",
+  // Features
+  creatable = false,
+  disabled = false,
+  loading = false,
+  searchable = true,
+  clearable = false,
+
+  // Custom renders
+  renderOption,
+  renderCreateOption,
 }: DynamicSelectProps) => {
   const searchOrCreateInputRef = useRef<HTMLInputElement>(null);
   const optionRefs = useRef<HTMLDivElement[]>([]);
 
   const [searchValue, setSearchValue] = useState("");
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
+  const [loadingOptions, setLoadingOptions] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [filteredOptions, setFilteredOptions] = useState(() => {
     return options.filter((option) =>
@@ -55,12 +96,16 @@ const DynamicSelect = ({
   });
 
   useEffect(() => {
+    setLoadingOptions(true);
+
     const debounce = setTimeout(() => {
       setFilteredOptions(
         options.filter((option) =>
           option.label.toLowerCase().includes(searchValue.toLowerCase())
         )
       );
+
+      setLoadingOptions(false);
       clearTimeout(debounce);
     }, 1000);
 
@@ -130,9 +175,14 @@ const DynamicSelect = ({
   }, [options, value, defaultValues]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className={twMerge("flex flex-col gap-2", containerClassName)}>
       {label && (
-        <label className="block text-sm font-medium leading-6 text-gray-900 peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+        <label
+          className={twMerge(
+            "block text-sm font-medium leading-6 text-gray-900",
+            "peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          )}
+        >
           {label}
         </label>
       )}
@@ -140,36 +190,68 @@ const DynamicSelect = ({
       <div className="relative">
         <button
           type="button"
+          disabled={disabled}
           className={twMerge(
             "shadow appearance-none border",
-            "rounded w-full px-3 py-2 text-gray-700 leading-tight focus:outline-none focus:ring-1 focus:ring-secondary-500 focus:border-transparent text-sm",
-            "inline-flex gap-[5px]",
-            sizeClasses[sizeVariant]
+            "rounded w-full px-3 py-2 text-gray-700 leading-tight",
+            "focus:outline-none focus:ring-1 focus:ring-secondary-500 focus:border-transparent",
+            "text-sm inline-flex gap-[5px]",
+            disabled && "opacity-50 cursor-not-allowed",
+            sizeClasses[sizeVariant],
+            className
           )}
-          aria-label={label}
-          onClick={() => handleOpenChange(!isOpen)}
+          onClick={() => !disabled && handleOpenChange(!isOpen)}
         >
           <span>{selectedOptionLabel ?? placeholder}</span>
+
+          {loading && <span className="loading-spinner" />}
         </button>
 
         {isOpen && (
-          <div className="z-20 flex flex-1 flex-col max-h-[400px] absolute top-0 left-0 w-full gap-2 bg-gray-100/60 backdrop-blur pb-4 border-gray-400 border rounded">
-            <input
-              ref={searchOrCreateInputRef}
-              type="text"
-              className="w-full px-4 p-2 bg-white border-none rounded text-sm text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-transparent focus:border-transparent"
-              placeholder={searchOrCreateInputPlaceholder}
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
+          <div
+            className={twMerge(
+              "z-20 flex flex-1 flex-col max-h-[400px]",
+              "absolute top-0 left-0 w-full gap-2",
+              "bg-white shadow-lg p-4",
+              "border-zinc-200 border rounded"
+            )}
+          >
+            {searchable && (
+              <input
+                ref={searchOrCreateInputRef}
+                type="text"
+                className={twMerge(
+                  "w-full px-4 p-2 bg-white border  rounded",
+                  "text-sm text-gray-600 placeholder-gray-400",
+                  "focus:outline-none focus:ring-1 focus:ring-transparent",
+                  inputClassName
+                )}
+                placeholder={searchOrCreateInputPlaceholder}
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+            )}
 
-            <div className="flex px-6 w-full">
-              <span className="text-sm text-gray-500 font-semibold">
-                {selectOrCreateMessage}
-              </span>
-            </div>
+            <span className="text-sm text-neutral-600 font-semibold mt-2 ml-1">
+              {selectOrCreateMessage}
+            </span>
 
-            <section className="w-full gap-2 px-4 overflow-auto">
+            <section
+              className={twMerge(
+                "w-full gap-2 overflow-auto max-h-[250px] pr-2 relative",
+                // Custom Scrollbar Styles using native CSS
+                "[&::-webkit-scrollbar]:w-2",
+                "[&::-webkit-scrollbar-track]:bg-gray-100",
+                "[&::-webkit-scrollbar-track]:rounded-full",
+                "[&::-webkit-scrollbar-thumb]:bg-gray-400",
+                "[&::-webkit-scrollbar-thumb]:rounded-full",
+                "[&::-webkit-scrollbar-thumb]:border-1",
+                "[&::-webkit-scrollbar-thumb]:border-gray-100",
+                "hover:[&::-webkit-scrollbar-thumb]:bg-gray-400",
+                // Firefox scrollbar styles
+                "scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300"
+              )}
+            >
               {filteredOptions.map(({ value: optionValue, label }, index) => (
                 <div
                   key={optionValue}
@@ -179,31 +261,53 @@ const DynamicSelect = ({
                       | undefined
                   }
                   className={twMerge(
-                    "cursor-pointer font-inter duration-150 transition-colors hover:bg-white/50 p-3 py-1 border border-gray-300 rounded-sm bg-white focus-visible:bg-white",
-                    optionValue === value && "bg-white",
+                    "cursor-pointer font-inter duration-150 transition-colors",
+                    "hover:bg-gray-50 p-2 py-1 border border-gray-200",
+                    "rounded-md bg-white focus-visible:bg-white",
+                    optionValue === value && "bg-gray-50 border-gray-300",
                     index === 0 ? "mt-0" : "mt-2",
-                    highlightedIndex === index && "bg-gray-200"
+                    highlightedIndex === index && "bg-gray-50 border-gray-300"
                   )}
                   onClick={() => handleSelectItem(optionValue)}
                 >
-                  <span className="text-sm text-gray-600 font-medium">
+                  <span className="text-sm text-neutral-600 font-medium">
                     {label}
                   </span>
                 </div>
               ))}
 
-              {filteredOptions.length < 1 && creatable && (
+              {filteredOptions.length < 1 && creatable && searchValue.length > 0 && (
                 <button
                   type="button"
-                  className="flex items-start justify-start p-2 w-full bg-gray-50 text-gray-600 border border-gray-400 rounded-sm focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-opacity-50 hover:bg-white transition-colors duration-150"
+                  className={twMerge(
+                    "flex items-start justify-start p-3 w-full",
+                    "bg-neutral-50 text-neutral-600 border border-neutral-300",
+                    "rounded-md focus:outline-none focus:ring-2",
+                    "focus:ring-gray-300 focus:ring-opacity-50",
+                    "hover:bg-neutral-100 transition-colors duration-150"
+                  )}
                   onClick={handleCreateNewOption}
                 >
-                  <span className="font-inter text-sm font">
+                  <span className="font-inter text-sm">
                     {`${creatableText}`} <b>{`"${searchValue}"`}</b>
                   </span>
                 </button>
               )}
             </section>
+
+            {loadingOptions && (
+              <div 
+                className={twMerge(
+                  "absolute inset-0 bg-white/60 backdrop-blur-[1px]",
+                  "flex items-center justify-center"
+                )}
+              >
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                  <span className="text-sm text-gray-600">{loadingMessage}</span>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
