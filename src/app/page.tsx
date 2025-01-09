@@ -37,9 +37,9 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-white flex flex-col items-center p-4">
-      <div className="max-w-2xl w-full space-y-6">
-        <div className="flex items-center flex-col text-center gap-6 py-8">
+    <div className="w-full h-full bg-white flex items-center justify-center p-4">
+      <div className="max-w-2xl w-full flex flex-col justify-center items-center gap-6">
+        <div className="flex w-full items-center flex-col text-center gap-6 py-8">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl text-neutral-800 font-bold tracking-tight">
               Creatable select component
@@ -70,7 +70,7 @@ export default function Home() {
           </a>
         </div>
 
-        <div className="flex flex-col bg-white p-8 rounded shadow-sm border gap-4">
+        <div className="flex w-full flex-col bg-white p-8 rounded shadow-sm border gap-4">
           <DynamicSelect
             options={programmingLanguages}
             placeholder="Choose programming languages"
@@ -92,6 +92,6 @@ export default function Home() {
           </button>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

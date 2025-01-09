@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} bg-gray-50`}>
         <Header />
-        <main className="min-h-screen pt-16 pb-16">{children}</main>
+        <main className="min-h-screen pt-16 pb-16 bg-white">{children}</main>
         <Footer />
       </body>
     </html>
