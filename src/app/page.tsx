@@ -44,15 +44,15 @@ export default function Home() {
             <h1 className="text-3xl text-neutral-800 font-bold tracking-tight">
               Creatable select component
             </h1>
-            <p className="text-gray-500 mt-1">assembled with tailwind</p>
+            <p className="text-gray-400 mt-1">assembled with tailwind</p>
           </div>
 
           {/* GitHub Button */}
           <a
-            href="https://github.com/yourusername/dynamic-select"
+            href="https://github.com/Mlfraga/creatable-select"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center px-4 py-2 border rounded-md bg-neutral-950 hover:bg-neutral-700 text-white hover:text-white transition-colors duration-75"
+            className="flex items-center px-4 py-2 border rounded bg-neutral-950 hover:bg-neutral-700 text-white hover:text-white transition-colors duration-75"
           >
             <svg
               className="w-5 h-5 mr-2"
@@ -70,28 +70,26 @@ export default function Home() {
           </a>
         </div>
 
-        <div className="bg-white p-8 rounded-lg shadow-sm border">
-          <div className="space-y-4">
-            <DynamicSelect
-              options={programmingLanguages}
-              placeholder="Choose programming languages"
-              onChange={handleChangeTechnology}
-              onCreateOption={handleCreateTechnology}
-              value={selectedTechnology}
-              creatable
-              searchable
-              label="Programming Languages"
-              creatableText="Add language"
-              searchOrCreateInputPlaceholder="Search languages or create newsdfsd..."
-            />
+        <div className="flex flex-col bg-white p-8 rounded shadow-sm border gap-4">
+          <DynamicSelect
+            options={programmingLanguages}
+            placeholder="Choose programming languages"
+            onChange={handleChangeTechnology}
+            onCreateOption={handleCreateTechnology}
+            value={selectedTechnology}
+            creatable
+            searchable
+            label="Programming Languages"
+            creatableText="Add language"
+            searchOrCreateInputPlaceholder="Search languages or create new..."
+          />
 
-            <button
-              type="submit"
-              className="w-full bg-black text-white rounded-md py-2 hover:bg-gray-800 transition-colors"
-            >
-              Submit
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="w-full bg-black text-white rounded py-2 hover:bg-gray-800 transition-colors"
+          >
+            Submit
+          </button>
         </div>
       </div>
     </main>

@@ -263,7 +263,7 @@ const DynamicSelect = ({
                   className={twMerge(
                     "cursor-pointer font-inter duration-150 transition-colors",
                     "hover:bg-gray-50 p-2 py-1 border border-gray-200",
-                    "rounded-md bg-white focus-visible:bg-white",
+                    " bg-white focus-visible:bg-white",
                     optionValue === value && "bg-gray-50 border-gray-300",
                     index === 0 ? "mt-0" : "mt-2",
                     highlightedIndex === index && "bg-gray-50 border-gray-300"
@@ -276,27 +276,29 @@ const DynamicSelect = ({
                 </div>
               ))}
 
-              {filteredOptions.length < 1 && creatable && searchValue.length > 0 && (
-                <button
-                  type="button"
-                  className={twMerge(
-                    "flex items-start justify-start p-3 w-full",
-                    "bg-neutral-50 text-neutral-600 border border-neutral-300",
-                    "rounded-md focus:outline-none focus:ring-2",
-                    "focus:ring-gray-300 focus:ring-opacity-50",
-                    "hover:bg-neutral-100 transition-colors duration-150"
-                  )}
-                  onClick={handleCreateNewOption}
-                >
-                  <span className="font-inter text-sm">
-                    {`${creatableText}`} <b>{`"${searchValue}"`}</b>
-                  </span>
-                </button>
-              )}
+              {filteredOptions.length < 1 &&
+                creatable &&
+                searchValue.length > 0 && (
+                  <button
+                    type="button"
+                    className={twMerge(
+                      "flex items-start justify-start p-3 w-full",
+                      "bg-neutral-50 text-neutral-600 border border-neutral-300",
+                      "rounded focus:outline-none focus:ring-2",
+                      "focus:ring-gray-300 focus:ring-opacity-50",
+                      "hover:bg-neutral-100 transition-colors duration-150"
+                    )}
+                    onClick={handleCreateNewOption}
+                  >
+                    <span className="font-inter text-sm">
+                      {`${creatableText}`} <b>{`"${searchValue}"`}</b>
+                    </span>
+                  </button>
+                )}
             </section>
 
             {loadingOptions && (
-              <div 
+              <div
                 className={twMerge(
                   "absolute inset-0 bg-white/60 backdrop-blur-[1px]",
                   "flex items-center justify-center"
@@ -304,7 +306,9 @@ const DynamicSelect = ({
               >
                 <div className="flex flex-col items-center gap-2">
                   <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
-                  <span className="text-sm text-gray-600">{loadingMessage}</span>
+                  <span className="text-sm text-gray-600">
+                    {loadingMessage}
+                  </span>
                 </div>
               </div>
             )}
