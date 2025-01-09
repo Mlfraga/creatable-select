@@ -14,7 +14,7 @@ export function Footer() {
           </a>
           <span>•</span>
           <a
-            href="https://linkedin.com/in/your_linkedin"
+            href="https://www.linkedin.com/in/matheus-fraga-257628178/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-gray-900 transition-colors"

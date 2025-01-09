@@ -115,6 +115,6 @@ We welcome contributions! Here’s how you can help:
 
 Developed with ❤️ by **Matheus Fraga**.
 
-- [GitHub](https://github.com/your-username)
-- [LinkedIn](https://linkedin.com/in/your-profile)
-- [Twitter](https://twitter.com/your-handle)
+- [GitHub](https://github.com/Mlfraga)
+- [LinkedIn](https://www.linkedin.com/in/matheus-fraga-257628178/)
+- [Twitter](https://x.com/FragaSlk)
