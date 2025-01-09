@@ -1,34 +1,120 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Dynamic Select
 
-## Getting Started
+**Dynamic Select** is a lightweight, accessible, and fully customizable React component for creating and managing selectable options. Built with **TypeScript** and styled using **Tailwind CSS**, it supports **search functionality**, and **creatable options** — all with **zero dependencies**. Whether you're building a simple form or a complex application, Dynamic Select is here to make your workflow easier.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+## ✨ Features
+
+- **Creatable Options**: Allow users to create new options on the fly.
+- **Search Functionality**: Easily filter options with a search bar.
+- **Dark Mode Support**: Easily adapts to your app's theme.
+- **Keyboard Navigation**: Full keyboard accessibility for seamless interactions.
+- **Zero Dependencies**: Lightweight and minimal setup.
+- **TypeScript Support**: Type-safe and developer-friendly.
+- **Tailwind CSS Styling**: Easily customizable with utility classes.
+
+---
+
+## 🚀 Usage
+
+Here’s a simple example of how to use the **Dynamic Select** component:
+
+```tsx
+import React, { useState } from "react";
+import DynamicSelect from "dynamic-select";
+
+const App = () => {
+  const [value, setValue] = useState("");
+
+  const handleCreateOption = async (newOption: string) => {
+    console.log("New option created:", newOption);
+    // Add additional logic here, like updating a database
+  };
+
+  const options = [
+    { value: "react", label: "React" },
+    { value: "vue", label: "Vue" },
+    { value: "angular", label: "Angular" },
+  ];
+
+  return (
+    <DynamicSelect
+      options={options}
+      value={value}
+      onChange={setValue}
+      onCreateOption={handleCreateOption}
+      placeholder="Select or create..."
+      label="Frameworks"
+      creatable
+      searchable
+      sizeVariant="md"
+    />
+  );
+};
+
+export default App;
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔧 Props
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+| Prop                 | Type                                      | Description                                  | Default       |
+| -------------------- | ----------------------------------------- | -------------------------------------------- | ------------- | ----------------------------------- | ------ |
+| `options`            | `Array<{ value: string; label: string }>` | The list of selectable options.              | `[]`          |
+| `value`              | `string`                                  | The currently selected value.                | `''`          |
+| `onChange`           | `(value: string) => void`                 | Callback fired when the selection changes.   | `undefined`   |
+| `onCreateOption`     | `(value: string) => Promise<void>`        | Callback fired when a new option is created. | `undefined`   |
+| `placeholder`        | `string`                                  | Placeholder text for the input.              | `"Select..."` |
+| `label`              | `string`                                  | Label for the select component.              | `''`          |
+| `creatable`          | `boolean`                                 | Enables the ability to create new options.   | `false`       |
+| `searchable`         | `boolean`                                 | Enables the search functionality.            | `false`       |
+| `disabled`           | `boolean`                                 | Disables the component.                      | `false`       |
+| `loading`            | `boolean`                                 | Shows a loading indicator.                   | `false`       |
+| `sizeVariant`        | `"sm"                                     | "md"                                         | "lg"`         | Controls the size of the component. | `"md"` |
+| `className`          | `string`                                  | Additional classes for the select container. | `''`          |
+| `containerClassName` | `string`                                  | Additional classes for the outer container.  | `''`          |
+| `inputClassName`     | `string`                                  | Additional classes for the input field.      | `''`          |
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🤝 Contributing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+We welcome contributions! Here’s how you can help:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. **Fork the Repository**:
 
-## Deploy on Vercel
+   - Click the "Fork" button at the top-right corner of this repository.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Clone Your Fork**:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+   ```bash
+   git clone https://github.com/your-username/dynamic-select.git
+   cd dynamic-select
+   ```
+
+3. **Install Dependencies**:
+
+   ```bash
+   npm install
+   ```
+
+4. **Run the Development Server**:
+
+   ```bash
+   npm run dev
+   ```
+
+5. **Submit a Pull Request**:
+   - After making your changes, create a pull request to the `main` branch.
+
+---
+
+## 👤 Author
+
+Developed with ❤️ by **Matheus Fraga**.
+
+- [GitHub](https://github.com/your-username)
+- [LinkedIn](https://linkedin.com/in/your-profile)
+- [Twitter](https://twitter.com/your-handle)

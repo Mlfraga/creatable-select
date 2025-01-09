@@ -282,11 +282,11 @@ const DynamicSelect = ({
                   <button
                     type="button"
                     className={twMerge(
-                      "flex items-start justify-start p-3 w-full",
-                      "bg-neutral-50 text-neutral-600 border border-neutral-300",
+                      "flex items-start justify-start p-2 w-full",
+                      "bg-white text-neutral-600 border border-gray-200",
                       "rounded focus:outline-none focus:ring-2",
                       "focus:ring-gray-300 focus:ring-opacity-50",
-                      "hover:bg-neutral-100 transition-colors duration-150"
+                      "hover:bg-gray-50 transition-colors duration-150"
                     )}
                     onClick={handleCreateNewOption}
                   >
